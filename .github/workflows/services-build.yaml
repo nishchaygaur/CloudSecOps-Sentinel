@@ -1,0 +1,47 @@
+name: Build & Deploy Cloud Run Services
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'services/**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy Services
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [detector, remediator, ai_analyst]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Google Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build & Push Container Image
+        run: |
+          IMAGE_URI="us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/sentinel-repo/sentinel-${{ matrix.service }}:${{ github.sha }}"
+          docker build -t $IMAGE_URI services/${{ matrix.service }}
+          docker push $IMAGE_URI
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy sentinel-${{ matrix.service }} \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/sentinel-repo/sentinel-${{ matrix.service }}:${{ github.sha }} \
+            --region us-central1 \
+            --platform managed
