@@ -20,3 +20,9 @@ variable "alert_notification_email" {
   type        = string
   default     = "security-alerts@example.com"
 }
+
+variable "enable_cloud_run" {
+  description = "Whether to provision Cloud Run services (requires an active GCP billing account)"
+  type        = bool
+  default     = false
+}

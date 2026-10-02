@@ -19,16 +19,16 @@ output "alerts_topic" {
 }
 
 output "detector_service_url" {
-  value       = module.cloud_run.detector_url
+  value       = var.enable_cloud_run ? module.cloud_run[0].detector_url : "Local/Docker (Cloud Run disabled without billing)"
   description = "Detector Cloud Run Service URL"
 }
 
 output "remediator_service_url" {
-  value       = module.cloud_run.remediator_url
+  value       = var.enable_cloud_run ? module.cloud_run[0].remediator_url : "Local/Docker (Cloud Run disabled without billing)"
   description = "Remediator Cloud Run Service URL"
 }
 
 output "ai_analyst_service_url" {
-  value       = module.cloud_run.ai_analyst_url
+  value       = var.enable_cloud_run ? module.cloud_run[0].ai_analyst_url : "Local/Docker (Cloud Run disabled without billing)"
   description = "AI Analyst Cloud Run Service URL"
 }

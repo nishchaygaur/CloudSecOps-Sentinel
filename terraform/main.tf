@@ -26,22 +26,25 @@ provider "google-beta" {
 # 1. Enable Required GCP APIs
 # -----------------------------------------------------------------------------
 locals {
-  services = [
+  base_services = [
     "logging.googleapis.com",
     "pubsub.googleapis.com",
-    "run.googleapis.com",
     "bigquery.googleapis.com",
-    "aiplatform.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "iam.googleapis.com",
     "storage.googleapis.com",
-    "compute.googleapis.com",
-    "eventarc.googleapis.com"
+    "cloudtrace.googleapis.com"
   ]
+  cloud_run_services = var.enable_cloud_run ? [
+    "run.googleapis.com",
+    "aiplatform.googleapis.com",
+    "eventarc.googleapis.com"
+  ] : []
+  services = concat(local.base_services, local.cloud_run_services)
 }
 
 resource "google_project_service" "enabled_apis" {
-  for_each           = toset(locals.services)
+  for_each           = toset(local.services)
   project            = var.project_id
   service            = each.key
   disable_on_destroy = false
@@ -91,6 +94,7 @@ module "audit_sinks" {
 # 6. Cloud Run Serverless Services (Detector, Remediator, AI Analyst)
 # -----------------------------------------------------------------------------
 module "cloud_run" {
+  count                 = var.enable_cloud_run ? 1 : 0
   source                = "./modules/cloud_run"
   project_id            = var.project_id
   region                = var.region
