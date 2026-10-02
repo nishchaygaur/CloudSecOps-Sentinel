@@ -14,6 +14,9 @@ from datetime import datetime, timezone
 import urllib.request
 import urllib.error
 
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8")
+
 def create_base_audit_event(service_name: str, method_name: str, principal: str, resource: str, caller_ip: str = "198.51.100.45", request_data: dict = None) -> dict:
     return {
         "insertId": f"audit-sim-{uuid.uuid4().hex[:12]}",
