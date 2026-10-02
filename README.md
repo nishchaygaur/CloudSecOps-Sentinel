@@ -5,8 +5,13 @@
 [![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-Cloud_Matrix-red?style=for-the-badge)](https://attack.mitre.org/matrices/enterprise/cloud/)
 [![BigQuery](https://img.shields.io/badge/SIEM-BigQuery-blue?style=for-the-badge&logo=google-bigquery&logoColor=white)](https://cloud.google.com/bigquery)
 [![Gemini](https://img.shields.io/badge/AI_Analyst-Gemini_2.5-8E75C2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Vercel](https://img.shields.io/badge/Live_Console-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://cloudsecops-sentinel.vercel.app)
 
-**CloudSecOps Sentinel** is an enterprise-grade, cloud-native Security Operations and Automated Incident Response (SOAR) platform engineered specifically for **Google Cloud Platform (GCP)**. 
+**CloudSecOps Sentinel** is an enterprise-grade, cloud-native Security Operations and Automated Incident Response (SOAR) platform engineered specifically for **Google Cloud Platform (GCP)**.
+
+* 🌐 **Live Web SOC Console**: [https://cloudsecops-sentinel.vercel.app](https://cloudsecops-sentinel.vercel.app) (Custom Domain: `https://cloudops.cyberforage.space`)
+* 🏢 **Google Cloud Project**: `financial-automation-data` (Region: `us-central1`)
+* 📂 **SIEM Data Lake**: BigQuery `secops_siem` (Partitioned `audit_events` & `security_alerts`)
 
 It continuously monitors GCP infrastructure, evaluates audit telemetry against the **MITRE ATT&CK Cloud Matrix**, auto-remediates critical misconfigurations in milliseconds, maintains a security data lake in **BigQuery**, and uses **Google Gemini** as an autonomous SecOps investigator to generate structured incident triage dossiers.
 
